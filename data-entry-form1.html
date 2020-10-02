@@ -1748,7 +1748,7 @@
 				showSpinner();
 
 				const session = await authClient.currentSession()
-				var _fetch = (session && session.hasCredentials()) ? session.fetch : fetch;
+				var _fetch = (session && session.hasCredentials()) ? authClient.authFetch : fetch;
 
 				var subject = validateSubject();
 				var predicate = validatePredicate();
@@ -1802,7 +1802,7 @@
 				showSpinner();
 
 				const session = await authClient.currentSession()
-				var _fetch = (session && session.hasCredentials()) ? session.fetch : fetch;
+				var _fetch = (session && session.hasCredentials()) ? authClient.authFetch : fetch;
 
 				var subject = validateSubject();
 				var predicate = validatePredicate();
@@ -1921,7 +1921,7 @@
 
 			async function loadProfile(url) {
 				const session = await authClient.currentSession()
-				var _fetch = (session && session.hasCredentials()) ? session.fetch : fetch;
+				var _fetch = (session && session.hasCredentials()) ? authClient.authFetch : fetch;
 
 				const options = {
 					method: 'GET',
