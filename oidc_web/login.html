@@ -82,7 +82,7 @@
       display: flex;
       flex-wrap: nowrap;
       justify-content: space-between;
-      margin: .5em;
+/*      margin: .5em;*/
     }
 
     .custom-idp input {
@@ -108,35 +108,22 @@
 <body>
 <div id="app-container">
   <div>
-    <p>Please enter your WebID or the URL of your identity provider:</p>
+    <p>Please enter your WebID or the URL of your identity provider</p>
+    <p>or pick an identity provider from the list:</p>
     <form class="custom-idp" id="custom-idp-form">
-      <input type="url" id="custom-idp" placeholder="https://my-identity.provider">
+      <input type="url" id="custom-idp" placeholder="https://my-identity.provider"/>
+      <select name="provider" class="form-control" id="c_idp_list" style="width:1.5em">
+        <option value="idp_community" selected>Solid Community</option>
+        <option value="idp_test_space">Solid Test Space</option>
+        <option value="idp_opl_oidc">OpenLink WebID-OIDC</option>
+        <option value="idp_opl_v5">OpenLink Solid Server ver:5.x</option>
+        <option value="idp_opl_ds">OpenLink Data Spaces (QA server)</option>
+        <option value="idp_opl_uriburner">OpenLink URIBurner Service</option>
+        <option value="idp_opl_myopl">OpenLink My Service</option>
+      </select>
       <button type="submit" id="login-custom">Go</button>
     </form>
-    <p>Or pick an identity provider from the list below:</p>
-    <div class="idp-list">
-      <button type="button" id="login_community" class="idp">
-        <span class="label">Solid Community</span>
-      </button>
-      <button type="button" id="login_test_space" class="idp">
-        <span class="label">Solid Test Space</span>
-      </button>
-      <button type="button" id="login_opl_oidc" class="idp">
-        <span class="label">OpenLink WebID-OIDC</span>
-      </button>
-      <button type="button" id="login_opl_v5" class="idp">
-        <span class="label">OpenLink Solid Server ver:5.x</span>
-      </button>
-      <button type="button" id="login_opl_ds" class="idp">
-        <span class="label">OpenLink Data Spaces (QA server)</span>
-      </button>
-      <button type="button" id="login_opl_uriburner" class="idp">
-        <span class="label">OpenLink URIBurner Service</span>
-      </button>
-      <button type="button" id="login_opl_myopl" class="idp">
-        <span class="label">OpenLink My Service</span>
-      </button>
-    </div>
+
   </div>
   <div id="logged" class="container hidden">
     <h4><p>Logged In as:</p></h4>
@@ -210,14 +197,6 @@
    * App/UI logic. This would normally done in React, Ember, Vue, etc.
    */
   function initButtons () {
-    initButton('login_community', () => login('https://solid.community'))
-    initButton('login_test_space', () => login('https://solidtest.space'))
-    initButton('login_opl_oidc', () => login('https://solid.openlinksw.com:8444'))
-    initButton('login_opl_v5', () => login('https://solid.openlinksw.com:8445'))
-    initButton('login_opl_ds', () => login('https://ods-qa.openlinksw.com'))
-    initButton('login_opl_uriburner', () => login('https://linkeddata.uriburner.com'))
-    initButton('login_opl_myopl', () => login('https://id.myopenlink.net'))
-
     initButton('login-custom', () => {
       var idp = document.getElementById('custom-idp').value
       if (idp.endsWith("/"))
@@ -226,6 +205,23 @@
     })
 
     initButton('logout', () => logout())
+
+    document.getElementById('c_idp_list').onchange = (e) => {
+      var sel = document.querySelector('#c_idp_list option:checked').value;
+      var val;
+      switch(sel) 
+      {
+        case 'idp_community':  val = 'https://solid.community'; break;
+        case 'idp_test_space': val = 'https://solidtest.space'; break;
+        case 'idp_opl_oidc':   val = 'https://solid.openlinksw.com:8444'; break;
+        case 'idp_opl_v5':     val = 'https://solid.openlinksw.com:8445'; break;
+        case 'idp_opl_ds':     val = 'https://ods-qa.openlinksw.com'; break;
+        case 'idp_opl_uriburner': val = 'https://linkeddata.uriburner.com'; break;
+        case 'idp_opl_myopl':  val = 'https://id.myopenlink.net'; break;
+      }
+      if (val)
+        login(val)
+    }
   }
 
   function initButton(id, action) {
