@@ -1747,6 +1747,53 @@
 				await setLimit();
 				showSpinner();
 
+				var docName = document.getElementById("docNameID2").value;
+				console.log("subject: " + subject)
+
+				var turtle_cmd = '<a> <b> <c>';
+
+				let url = docName;
+
+				if (document.getElementById("fctID").checked == true) {
+					console.log("Insert Command:" + turtle_cmd);
+				}
+
+
+				const options = {
+					method: 'PUT',
+					headers: {
+						'Content-type': 'text/turtle;charset=utf-8',
+					},
+					credentials: 'include',
+					mode: 'cors',
+					crossDomain: true,
+					body: turtle_cmd,
+				};
+
+				try {
+					var resp = await authClient.authFetch(url, options);
+					if (resp.status >= 200 && resp.status <= 300) {
+						hideSpinner();
+						console.log(resp.status + " - " + resp.statusText);
+						updateTable();
+					}
+					else {
+						hideSpinner();
+						throw new Error("Error " + resp.status + " - " + resp.statusText);
+					}
+				} catch (e) {
+					hideSpinner();
+					console.error('Insert Failed ' + e);
+					alert('Insert Failed ' + e)
+				}
+				await setTableSize();
+				await buttonDisplay();
+			}
+
+			async function turtleGen0() {
+				await setLimit();
+				showSpinner();
+
 				var subject = validateSubject();
 				var predicate = validatePredicate();
 				var object = await validateObject(); // insert function awaits object value before proceeding
