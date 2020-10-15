@@ -423,15 +423,17 @@
 						$('a[href="#fsID"]').tab('show');
 				} 
 				else {
-				    if (lastState.tab === "fs")
+				    var documentName;
+				    if (lastState.tab === "fs") {
 						$('a[href="#fsID"]').tab('show');
-					else
+						documentName = document.getElementById('docNameID2');
+					} else {
 						$('a[href="#dbmsID"]').tab('show');
+						documentName = document.getElementById('docNameID');
+					}
 
-					if (lastState.documentName) {
-				       var documentName = checkPermalinkTab("docNameID", "docNameID2");
+					if (documentName)
 					   documentName.value = lastState.documentName;
-				    }
 				}
 				 
 				updateLoginState();
