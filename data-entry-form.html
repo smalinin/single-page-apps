@@ -520,16 +520,16 @@
 					console.log('solid storage: ' + solid_storage);
 				}
 
-				if (solid_storage == null) {
+				if (solid_storage == null || solid_storage==="null") {
 					document.getElementById("docNameID").value = "urn:records:test";
-					document.getElementById("docNameID2").value = "https://kingsley.idehen.net/public_home/jordan/Public/record-test.ttl";
+//					document.getElementById("docNameID2").value = "https://kingsley.idehen.net/public_home/jordan/Public/record-test.ttl";
 				} else {
 					document.getElementById("docNameID").value = solid_storage_value;
 					document.getElementById("docNameID2").value = solid_storage_value;
 				}
 
 				// value from permalink
-				if (initialDocumentName != "" && initialTab != "") {
+				if (initialDocumentName && initialTab) {
 					var documentName = checkPermalinkTab("docNameID", "docNameID2");
 					documentName.value = initialDocumentName;
 				}
