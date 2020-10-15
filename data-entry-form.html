@@ -388,6 +388,7 @@
 			var initialObject = "";
 			var initialDocumentName = "";
 			var initialEndpoint = "";
+			var lastState = {tab:"dbms", documentName:""};
 			const { OIDCWebClient } = OIDC;
 			const authClient = new OIDCWebClient({ solid: true });
 
@@ -404,6 +405,10 @@
 				var setInputs = params.get("setInputs");
 
 				resetPermalink();
+				try {
+				  var lastState = JSON.parse(sessionStorage.getItem('lastState'))
+				} catch(e) {}
+
 				if (setInputs == "true") {
 					initialTab = decodeURIComponent(params.get("tab"));
 					initialSubject = decodeURIComponent(params.get("subject"));
@@ -416,7 +421,19 @@
 						$('a[href="#dbmsID"]').tab('show');
 					else if (initialTab == "fs")
 						$('a[href="#fsID"]').tab('show');
+				} 
+				else {
+				    if (lastState.tab === "fs")
+						$('a[href="#fsID"]').tab('show');
+					else
+						$('a[href="#dbmsID"]').tab('show');
+
+					if (lastState.documentName) {
+				       var documentName = checkPermalinkTab("docNameID", "docNameID2");
+					   documentName.value = lastState.documentName;
+				    }
 				}
+				 
 				updateLoginState();
 			});
 
@@ -1859,10 +1876,12 @@
 				var tab = "";
 
 				if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
-					tab = "dbms";
+					lastState.tab = tab = "dbms";
 				} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
-					tab = "fs";
+					lastState.tab = tab = "fs";
 				}
+
+				lastState.documentName = documentName;
 
 				permalink.href = window.location.origin + window.location.pathname;
 				permalink.href = permalink.href + "?setInputs=true&";
@@ -1872,6 +1891,8 @@
 				permalink.href = permalink.href + "object=" + encodeURIComponent(object.value) + "&";
 				permalink.href = permalink.href + "documentName=" + encodeURIComponent(documentName.value) + "&";
 				permalink.href = permalink.href + "endpoint=" + encodeURIComponent(endpoint.value);
+
+				sessionStorage.setItem('lastState', JSON.stringify(lastState));
 			}
 		</script>
 
