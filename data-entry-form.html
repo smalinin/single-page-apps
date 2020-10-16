@@ -426,14 +426,13 @@
 				    var documentName;
 				    if (lastState.tab === "fs") {
 						$('a[href="#fsID"]').tab('show');
-						documentName = document.getElementById('docNameID2');
+						if (lastState.documentName)
+					      document.getElementById('docNameID2').value = lastState.documentName;
 					} else {
 						$('a[href="#dbmsID"]').tab('show');
-						documentName = document.getElementById('docNameID');
+						if (lastState.documentName)
+					      document.getElementById('docNameID').value = lastState.documentName;
 					}
-
-					if (documentName)
-					   documentName.value = lastState.documentName;
 				}
 				 
 				updateLoginState();
