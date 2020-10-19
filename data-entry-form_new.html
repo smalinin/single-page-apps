@@ -212,11 +212,6 @@
 								</div>
 								<div class="form-group">
 									<label for="docNameID2">Document Name</label>
-<!--
-									<input type="text" class="form-control"
-										value="https://kingsley.idehen.net/public_home/jordan/Public/record-test.ttl"
-										id="docNameID2" >
--->
 									<input type="text" class="form-control"
 										value="https://id.myopenlink.net/public_home/KingsleyUyiIdehen/RWW-QA/test1.ttl"
 										id="docNameID2" >
@@ -1949,8 +1944,10 @@
 				var object = nonvalidatedObject(); // insert function awaits object value before proceeding
 				var docName = DOC.iSel("docNameID2").value;
 
+//				var del_cmd =
+//					"" + "PREFIX : <" + docName + "#> DELETE DATA" + ' ' + "{" + subject + ' ' + predicate + ' ' + object + ' ' + ".}" + ""
 				var del_cmd =
-					"" + "PREFIX : <" + docName + "#> DELETE DATA" + ' ' + "{" + subject + ' ' + predicate + ' ' + object + ' ' + ".}" + ""
+					`PREFIX : <${docName}#> DELETE { GRAPH <${docName}> { ${subject} ${predicate} ${object} . } }`;
 
 				let url = docName;
 				if (DOC.iSel("fctID").checked == true) {
