@@ -2048,6 +2048,9 @@
 						var body = await resp.text();
 						var contentType = resp.headers.get('content-type');
 						var server = resp.headers.get('x-powered-by');
+						for(var x of resp.headers.entries()) {
+						  console.log(x);
+						}
 						var solid_server = (server && server.toLowerCase().indexOf('solid')!== -1) ? true : false;
 						return { profile: body, contentType, solid_server };
 					}
