@@ -45,9 +45,15 @@
 					</div>
 					<!-- Inference Rule Name -->
 					<div class="checkbox">
-						<label><input id="ruleNameID" type="checkbox" value="">Inference Rule</label> <br>
+						<label><input id="ruleNameID" type="checkbox" value="">Inference Rule</label> 
 						<input type="text" style="max-width: 250px" value="urn:ifp:inference:rule" id="infRuleNameID">
 					</div>
+					<div >
+						<label style="font-weight: normal" >SPARQL Endpoint</label> 
+						<input type="text" style="width: 20em" value="https://linkeddata.uriburner.com/sparql" id="sparql_url">
+					</div>
+
+
 					<!-- Console Print Commands Checkbox  -->
 					<div class="checkbox">
 						<label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
@@ -55,7 +61,7 @@
 					<!-- Number of Results per Page -->
 					<div class="form-group">
 						<label style="font-weight: normal" for="resultsID">Results per Page:</label>
-						<input type="text" style="max-width: 250px" value="5" id="resultsID">
+						<input type="text" style="width: 5em" value="5" id="resultsID">
 					</div>
 					<h5> Return Data As: </h4>
 						<!-- Default Download Type -->
@@ -357,7 +363,7 @@
 		<style>
 			.dropdown-menu {
 				padding-left: 15px;
-				width: 250px;
+				width: 450px;
 			}
 
 			.glyphicon.glyphicon-cog {
@@ -594,8 +600,13 @@
 						loggedHref.title = webid
 
 						var rc = await fetchProfile(webid);
-						this.solid_storage = rc.store;
-						this.is_solid_server = rc.is_solid_server;
+						if (rc) {
+						  this.solid_storage = rc.store;
+						  this.is_solid_server = rc.is_solid_server;
+						} else {
+						  this.solid_storage = null;
+						  this.is_solid_server = false;
+						}
 						sessionStorage.setItem('solid_storage', this.solid_storage);
 						this.docNameValue()
 					}
@@ -2037,7 +2048,7 @@
 
 				} catch (e) {
 					console.error('Error', e)
-					alert('Error ', e)
+//					alert('Error ', e)
 					return null;
 				}
 			}
