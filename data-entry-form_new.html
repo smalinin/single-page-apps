@@ -1944,8 +1944,11 @@
 				var object = nonvalidatedObject(); // insert function awaits object value before proceeding
 				var docName = DOC.iSel("docNameID2").value;
 
+//					`INSERT DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
+
 				var del_cmd =
-					`PREFIX : <${docName}#> DELETE DATA { ${subject} ${predicate} ${object} .} `
+					`DELETE DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
+//					`PREFIX : <${docName}#> DELETE DATA { ${subject} ${predicate} ${object} .} `
 //				var del_cmd =
 //					`PREFIX : <${docName}#> DELETE { GRAPH <${docName}> { ${subject} ${predicate} ${object} . } }`;
 
