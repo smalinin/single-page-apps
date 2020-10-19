@@ -449,6 +449,12 @@
 
 			  
 			  updatePermalink() {
+				if (DOC.iSel('dbmsTabID').getAttribute('class') === "active") {
+					this.lastState.tab = tab = "dbms";
+				} else if (DOC.iSel('fsTabID').getAttribute('class') === "active") {
+					this.lastState.tab = tab = "fs";
+				}
+
 				var permalink = DOC.iSel("permalinkID");
 				var subject = this.checkId("subjectID", "subjectID2");
 				var predicate = this.checkId("predicateID", "predicateID2");
@@ -456,12 +462,6 @@
 				var documentName = this.checkId("docNameID", "docNameID2");
 				var endpoint = this.checkId("endpointID", "endpointID2");
 				var tab = "";
-
-				if (DOC.iSel('dbmsTabID').getAttribute('class') === "active") {
-					this.lastState.tab = tab = "dbms";
-				} else if (DOC.iSel('fsTabID').getAttribute('class') === "active") {
-					this.lastState.tab = tab = "fs";
-				}
 
 				this.lastState.documentName = documentName.value;
 				sessionStorage.setItem('lastState', JSON.stringify(this.lastState));
