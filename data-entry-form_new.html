@@ -2023,9 +2023,9 @@
 					var store = kb.any(s_webId, PIM('storage'));
 					var inbox = kb.any(s_webId, LDP('inbox'));
 
-					var s_issuer = kb.any(s_webid, SOLID('oidcIssuer'));
-					var s_account = kb.any(s_webid, SOLID('account'));
-					var s_pubIndex = kb.any(s_webid, SOLID('publicTypeIndex'));
+					var s_issuer = kb.any(s_webId, SOLID('oidcIssuer'));
+					var s_account = kb.any(s_webId, SOLID('account'));
+					var s_pubIndex = kb.any(s_webId, SOLID('publicTypeIndex'));
 
 					var is_solid_server = (s_issuer || s_account || s_pubIndex) ? true : false;
 
