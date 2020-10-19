@@ -2035,9 +2035,11 @@
 			}
 
 			async function loadProfile(url) {
+//			access-control-expose-headers: headername1
 				const options = {
 					method: 'GET',
-					headers: { 'Accept': 'text/turtle, application/ld+json' },
+					headers: { 'Accept': 'text/turtle, application/ld+json', 
+					           'access-control-expose-headers': 'X-Powered-By'},
 					credentials: 'include',
 					mode: 'cors',
 					crossDomain: true,
