@@ -2014,6 +2014,8 @@
 			async function fetchProfile(webId) {
 				try {
 					var rc = await loadProfile(webId);
+					if (!rc)
+					  return null;
 
 					var uriObj = new URL(webId)
 					uriObj.hash = uriObj.search = uriObj.query = '';
@@ -2054,9 +2056,12 @@
 			}
 
 			async function loadProfile(url) {
+			    if (!url.startsWith('https://'))
+			      return null;
+
 				const options = {
 					method: 'GET',
-					headers: { 'Accept': 'text/turtle, application/ld+json'},
+					headers: { 'Accept': 'text/turtle, application/ld+json' },
 					credentials: 'include',
 					mode: 'cors',
 					crossDomain: true,
@@ -2066,7 +2071,7 @@
 					if (resp.ok) {
 						var body = await resp.text();
 						var contentType = resp.headers.get('content-type');
-						return { profile: body, contentType};
+						return { profile: body, contentType };
 					}
 					else {
 						console.log("Error " + resp.status + " - " + resp.statusText)
@@ -2075,6 +2080,7 @@
 				catch (e) {
 					console.error('Request failed', e)
 					alert('Request failed ', e)
+					return null;
 				}
 			}
 
