@@ -379,6 +379,7 @@
 			class State {
 			  constructor() {
 			    this.solid_storage = null;
+			    this.solid_server = false;
 				this.initialTab = "";
 			    this.initialSubject = "";
 			    this.initialPredicate = "";
@@ -592,7 +593,9 @@
 						loggedHref.href = webid
 						loggedHref.title = webid
 
-						this.solid_storage = await fetchProfile(webid);
+						var rc = await fetchProfile(webid);
+						this.solid_storage = rc.store;
+						this.solid_server = rc.solid_server;
 						sessionStorage.setItem('solid_storage', this.solid_storage);
 						this.docNameValue()
 					}
@@ -602,6 +605,7 @@
 					loggedHref.href = ''
 					loggedHref.title = ''
 					this.solid_storage = null;
+					this.solid_server = false;
 					sessionStorage.removeItem('solid_storage');
 				}
 				updateTable();
@@ -1943,14 +1947,14 @@
 				var predicate = validatePredicate();
 				var object = nonvalidatedObject(); // insert function awaits object value before proceeding
 				var docName = DOC.iSel("docNameID2").value;
+				var del_cmd;
 
-//					`INSERT DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
-
-				var del_cmd =
-					`DELETE DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
-//					`PREFIX : <${docName}#> DELETE DATA { ${subject} ${predicate} ${object} .} `
-//				var del_cmd =
-//					`PREFIX : <${docName}#> DELETE { GRAPH <${docName}> { ${subject} ${predicate} ${object} . } }`;
+				if (state.solid_server)
+					del_cmd =
+						`DELETE DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
+				else
+					del_cmd =
+						`PREFIX : <${docName}#> DELETE { GRAPH <${docName}> { ${subject} ${predicate} ${object} . } }`;
 
 				let url = docName;
 				if (DOC.iSel("fctID").checked == true) {
@@ -2017,12 +2021,12 @@
 
 					var store = kb.any(s_webId, PIM('storage'));
 					var inbox = kb.any(s_webId, LDP('inbox'));
-					if (inbox)
-						ret = inbox.value;
-					else if (store)
-						ret = store.value;
 
-					return ret;
+					if (inbox)
+						return {store: inbox.value, solid_server: rc.solid_server};
+					else if (store)
+						return {store: store.value, solid_server: rc.solid_server};
+
 				} catch (e) {
 					console.error('Error', e)
 					alert('Error ', e)
@@ -2043,7 +2047,9 @@
 					if (resp.ok) {
 						var body = await resp.text();
 						var contentType = resp.headers.get('content-type');
-						return { profile: body, contentType };
+						var server = resp.headers.get('x-powered-by');
+						var solid_server = (server && server.toLowerCase().indexOf('solid')!== -1) ? true : false;
+						return { profile: body, contentType, solid_server };
 					}
 					else {
 						console.log("Error " + resp.status + " - " + resp.statusText)
