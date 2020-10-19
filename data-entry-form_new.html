@@ -379,7 +379,7 @@
 			class State {
 			  constructor() {
 			    this.solid_storage = null;
-			    this.solid_server = false;
+			    this.is_solid_server = false;
 				this.initialTab = "";
 			    this.initialSubject = "";
 			    this.initialPredicate = "";
@@ -595,7 +595,7 @@
 
 						var rc = await fetchProfile(webid);
 						this.solid_storage = rc.store;
-						this.solid_server = rc.solid_server;
+						this.is_solid_server = rc.is_solid_server;
 						sessionStorage.setItem('solid_storage', this.solid_storage);
 						this.docNameValue()
 					}
@@ -605,7 +605,7 @@
 					loggedHref.href = ''
 					loggedHref.title = ''
 					this.solid_storage = null;
-					this.solid_server = false;
+					this.is_solid_server = false;
 					sessionStorage.removeItem('solid_storage');
 				}
 				updateTable();
@@ -1949,7 +1949,7 @@
 				var docName = DOC.iSel("docNameID2").value;
 				var del_cmd;
 
-				if (state.solid_server)
+				if (state.is_solid_server)
 					del_cmd =
 						`DELETE DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
 				else
@@ -2013,6 +2013,7 @@
 
 					const LDP = $rdf.Namespace("http://www.w3.org/ns/ldp#");
 					const PIM = $rdf.Namespace("http://www.w3.org/ns/pim/space#");
+					const SOLID = $rdf.Namespace("http://www.w3.org/ns/solid/terms#");
 
 					const s_webId = $rdf.sym(webId)
 
@@ -2022,10 +2023,16 @@
 					var store = kb.any(s_webId, PIM('storage'));
 					var inbox = kb.any(s_webId, LDP('inbox'));
 
+					var s_issuer = kb.any(s_webid, SOLID('oidcIssuer'));
+					var s_account = kb.any(s_webid, SOLID('account'));
+					var s_pubIndex = kb.any(s_webid, SOLID('publicTypeIndex'));
+
+					var is_solid_server = (s_issuer || s_account || s_pubIndex) ? true : false;
+
 					if (inbox)
-						return {store: inbox.value, solid_server: rc.solid_server};
+						return {store: inbox.value, is_solid_server};
 					else if (store)
-						return {store: store.value, solid_server: rc.solid_server};
+						return {store: store.value, is_solid_server};
 
 				} catch (e) {
 					console.error('Error', e)
@@ -2035,11 +2042,9 @@
 			}
 
 			async function loadProfile(url) {
-//			access-control-expose-headers: headername1
 				const options = {
 					method: 'GET',
-					headers: { 'Accept': 'text/turtle, application/ld+json', 
-					           'Access-Control-Expose-Headers': '*, X-Powered-By, x-powered-by'},
+					headers: { 'Accept': 'text/turtle, application/ld+json'},
 					credentials: 'include',
 					mode: 'cors',
 					crossDomain: true,
@@ -2049,12 +2054,7 @@
 					if (resp.ok) {
 						var body = await resp.text();
 						var contentType = resp.headers.get('content-type');
-						var server = resp.headers.get('x-powered-by');
-						for(var x of resp.headers.entries()) {
-						  console.log(x);
-						}
-						var solid_server = (server && server.toLowerCase().indexOf('solid')!== -1) ? true : false;
-						return { profile: body, contentType, solid_server };
+						return { profile: body, contentType};
 					}
 					else {
 						console.log("Error " + resp.status + " - " + resp.statusText)
