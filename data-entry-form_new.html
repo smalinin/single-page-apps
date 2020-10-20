@@ -1946,10 +1946,11 @@
 				var del_cmd;
 				var is_solid_server = false;
 
-				if (state.is_solid_id && (new URL(state.webid)).origin === (new URL(docName)).origin) {
-				  	is_solid_server = true;
-				}
-
+				try {
+					if (state.is_solid_id && (new URL(state.webid)).origin === (new URL(docName)).origin) {
+				  		is_solid_server = true;
+					}
+				} catch (e) { }
 
 				if (is_solid_server)
 					del_cmd =
