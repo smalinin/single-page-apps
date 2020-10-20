@@ -372,6 +372,7 @@
 			  constructor() {
 			    this.solid_storage = null;
 			    this.is_solid_id = false;
+			    this.webid = null;
 				this.initialTab = "";
 			    this.initialSubject = "";
 			    this.initialPredicate = "";
@@ -577,6 +578,7 @@
 				if (loggedIn) {
 					var webid = session.idClaims.sub;
 					if (webid) {
+					    this.webid = webid;
 						loggedHref.classList.remove('hidden')
 						loggedHref.href = webid
 						loggedHref.title = webid
@@ -599,6 +601,7 @@
 					loggedHref.title = ''
 					this.solid_storage = null;
 					this.is_solid_id = false;
+					this.webid = null;
 					sessionStorage.removeItem('solid_storage');
 				}
 				updateTable();
