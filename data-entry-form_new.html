@@ -581,6 +581,14 @@
 						loggedHref.href = webid
 						loggedHref.title = webid
 
+{
+  try {
+    var rc = await fetch("https://smalinin.solid.openlinksw.com:8445");
+    console.log(rc);
+  } catch(e) {
+    console.log(e);
+  }
+}
 						var rc = await fetchProfile(webid);
 						if (rc) {
 						  this.solid_storage = rc.store;
