@@ -127,15 +127,6 @@
 									<input type="text" class="form-control" value="urn:records:test" id="docNameID">
 									<p class="errorMessage" id="docNameErrorID"></p>
 								</div>
-<!--
-								<div class="form-group">
-									<label for="endpointID">SPARQL Endpoint</label> <span
-										class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
-										data-original-title="Required for accepted relation object (values) lookup"></span>
-									<input type="text" class="form-control" id="endpointID" size="35"
-										value="https://linkeddata.uriburner.com/sparql" />
-								</div>
--->
 
 								<!-- Start Buttons -->
 								<div class=button-wrapper>
@@ -225,15 +216,6 @@
 										id="docNameID2" >
 									<p class="errorMessage" id="docNameErrorID2"></p>
 								</div>
-<!--
-								<div class="form-group">
-									<label for="endpointID2">SPARQL Endpoint (required for predicate lookup)</label>
-									<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
-										data-original-title="Required for accepted relation object (values) lookup"></span>
-									<input type="text" class="form-control" id="endpointID2" size="35"
-										value="https://linkeddata.uriburner.com/sparql" />
-								</div>
--->
 
 								<!-- Start Buttons -->
 								<div class=button-wrapper>
@@ -464,7 +446,6 @@
 				var predicate = this.checkId("predicateID", "predicateID2");
 				var object = this.checkId("objectID", "objectID2");
 				var documentName = this.checkId("docNameID", "docNameID2");
-//??				var endpoint = this.checkId("endpointID", "endpointID2");
 				var endpoint = DOC.iSel('sparql_endpoint');
 				var tab = "";
 
@@ -489,7 +470,6 @@
 				var predicate = this.checkPermalinkTab("predicateID", "predicateID2");
 				var object = this.checkPermalinkTab("objectID", "objectID2");
 				var documentName = this.checkPermalinkTab("docNameID", "docNameID2");
-//??				var endpoint = this.checkPermalinkTab("endpointID", "endpointID2");
 				var endpoint = DOC.iSel("sparql_endpoint");
 
 				if (this.initialSubject) {
@@ -571,16 +551,12 @@
 			  clearInput() {
 				if (this.getCurTab() === "dbms") {
 					var curDocName = DOC.iSel("docNameID").value; // Stores current value of docName
-//??					var curEndpoint = DOC.iSel("endpointID").value; // Stores current value of endpoint
 					DOC.iSel("dbmsFormID").reset(); // Resets entire form
 					DOC.iSel("docNameID").value = curDocName; // Added so docname is not reset
-//??					DOC.iSel("endpointID").value = curEndpoint; // Added so endpoint is not reset
 				} else if (this.getCurTab() === "fs") {
 					var curDocName = DOC.iSel("docNameID2").value;
-//??					var curEndpoint = DOC.iSel("endpointID2").value;
 					DOC.iSel("fsFormID").reset();
 					DOC.iSel("docNameID2").value = curDocName;
-//??					DOC.iSel("endpointID2").value = curEndpoint;
 				}
 			  }
 
@@ -608,7 +584,7 @@
 						var rc = await fetchProfile(webid);
 						if (rc) {
 						  this.solid_storage = rc.store;
-						  this.is_solid_server = rc.is_solid_server;
+						  this.is_solid_server = false;
 						} else {
 						  this.solid_storage = null;
 						  this.is_solid_server = false;
@@ -652,7 +628,6 @@
 				DOC.iSel('predicateID').onchange = () => { state.updatePermalink() }
 				DOC.iSel('objectID').onchange = () => { state.updatePermalink() }
 				DOC.iSel('docNameID').onchange = () => { state.updatePermalink() }
-//??				DOC.iSel('endpointID').onchange = () => { state.updatePermalink() }
 
 				DOC.iSel('clearBtnID').onclick = () => { state.clearInput() }
 				DOC.iSel('insertBtnID').onclick = () => { recordGen() }
@@ -670,7 +645,6 @@
 				DOC.iSel('predicateID2').onchange = () => { state.updatePermalink() }
 				DOC.iSel('objectID2').onchange = () => { state.updatePermalink() }
 				DOC.iSel('docNameID2').onchange = () => { state.updatePermalink() }
-//??				DOC.iSel('endpointID2').onchange = () => { state.updatePermalink() }
 
 				DOC.iSel('clearBtnID2').onclick = () => { state.clearInput() }
 				DOC.iSel('insertBtnID2').onclick = () => { turtleGen() }
@@ -1277,7 +1251,6 @@
 					query = "DEFINE input:inference" + ' ' + "'" + DOC.iSel("infRuleNameID").value + "'" + ' \n' + query;
 				}
 
-//??				var endpoint = state.checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=";
 				var endpoint = DOC.iSel("sparql_endpoint").value + "?default-graph-uri=&query=";
 				let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson";
 
@@ -1345,7 +1318,6 @@
 					+ subject + ' ' + predicate + ' ' + object + " . \n"
 					+ "}";
 
-//??				var endpoint = DOC.iSel("endpointID").value;
 				var endpoint = DOC.iSel("sparql_endpoint").value;
 				let url = endpoint;
 
@@ -1404,7 +1376,6 @@
 					+ subject + ' ' + predicate + ' ' + object + "."
 					+ "} \n };"
 
-//??				var endpoint = DOC.iSel("endpointID").value;
 				var endpoint = DOC.iSel("sparql_endpoint").value;
 				let url = endpoint;
 
@@ -1467,7 +1438,6 @@
 					data_query = "DEFINE input:inference" + ' ' + "'" + DOC.iSel("infRuleNameID").value + "'" + ' \n' + data_query;
 				}
 
-//??				var endpoint = state.checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=";
 				var endpoint = DOC.iSel("sparql_endpoint").value + "?default-graph-uri=&query=";
 				if (DOC.iSel("csvID").checked == true) {
 					var downloadURL = endpoint + encodeURIComponent(data_query) + "&should-sponge=&format=text%2Fcsv";
@@ -1527,7 +1497,6 @@
 					await downloadResults();
 				}
 
-//??				var endpoint = state.checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=";
 				var endpoint = DOC.iSel("sparql_endpoint").value + "?default-graph-uri=&query=";
 				let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson";
 
@@ -1645,7 +1614,6 @@
 					await downloadResults();
 				}
 
-//??				var endpoint = state.checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=";
 				var endpoint = DOC.iSel("sparql_endpoint").value + "?default-graph-uri=&query=";
 				let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson";
 
@@ -1774,7 +1742,6 @@
 					await downloadResults();
 				}
 
-//??				var endpoint = state.checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=";
 				var endpoint = DOC.iSel("sparql_endpoint").value + "?default-graph-uri=&query=";
 				let url = endpoint + encodeURIComponent(data_query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson";
 
@@ -1878,7 +1845,6 @@
 					+ "filter (?range in (rdfs:Literal, xsd:string, xsd:decimal, xsd:integer, xsd:boolean, xsd:date, xsd:time))\n"
 					+ "}"
 
-//??				var endpoint = state.checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=";
 				var endpoint = DOC.iSel("sparql_endpoint").value + "?default-graph-uri=&query=";
 				// This sets the url for retrieving the json
 				let url = endpoint + encodeURIComponent(range_query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson";
@@ -1974,16 +1940,12 @@
 				var predicate = validatePredicate();
 				var object = nonvalidatedObject(); // insert function awaits object value before proceeding
 				var docName = DOC.iSel("docNameID2").value;
-				var del_cmd;
+				var del_cmd, del_cmd_solid;
 
-				if (state.is_solid_server)
-					del_cmd =
-						`DELETE DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
-				else
-					del_cmd =
-						`PREFIX : <${docName}#> DELETE DATA { GRAPH <${docName}> { ${subject} ${predicate} ${object} . } }`;
-//						`DELETE DATA {@prefix : <${docName}#> . GRAPH <${docName}> { ${subject} ${predicate} ${object} . } }`;
-
+				del_cmd =
+					`PREFIX : <${docName}#> DELETE DATA { GRAPH <${docName}> { ${subject} ${predicate} ${object} . } }`;
+				del_cmd_solid =
+					`DELETE DATA {@prefix : <${docName}#> . ${subject}  ${predicate}  ${object} . } `
 
 				let url = docName;
 				if (DOC.iSel("fctID").checked == true) {
@@ -2002,6 +1964,9 @@
 					body: del_cmd,
 				};
 
+				if (state.is_solid_server)
+					options.body = del_cmd_solid;
+
 				try {
 					var resp = await authClient.authFetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
@@ -2010,8 +1975,22 @@
 						updateTable();
 					}
 					else {
-						hideSpinner();
-						throw new Error("Error " + resp.status + " - " + resp.statusText);
+					    if (resp.status == 400) {
+					    	options.body = del_cmd_solid;
+					        resp = await authClient.authFetch(url, options);
+							if (resp.status >= 200 && resp.status <= 300) {
+							    state.is_solid_server = true;
+								hideSpinner();
+								console.log(resp.status + " - " + resp.statusText);
+								updateTable();
+							}
+							else {
+								throw new Error("Error " + resp.status + " - " + resp.statusText);
+							}
+					    }
+					    else {
+							throw new Error("Error " + resp.status + " - " + resp.statusText);
+						}
 					}
 				} catch (e) {
 					hideSpinner();
@@ -2054,16 +2033,10 @@
 					var store = kb.any(s_webId, PIM('storage'));
 					var inbox = kb.any(s_webId, LDP('inbox'));
 
-					var s_issuer = kb.any(s_webId, SOLID('oidcIssuer'));
-					var s_account = kb.any(s_webId, SOLID('account'));
-					var s_pubIndex = kb.any(s_webId, SOLID('publicTypeIndex'));
-
-					var is_solid_server = (s_issuer || s_account || s_pubIndex) ? true : false;
-
 					if (inbox)
-						return {store: inbox.value, is_solid_server};
+						return {store: inbox.value};
 					else if (store)
-						return {store: store.value, is_solid_server};
+						return {store: store.value};
 
 				} catch (e) {
 					console.error('Error', e)
