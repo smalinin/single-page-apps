@@ -584,7 +584,8 @@
 {
   try {
     var rc = await fetch("https://smalinin.solid.openlinksw.com:8445");
-    for(var h of rc.headers().entries() )
+    console.log(rc.headers);
+    for(var h of rc.headers.entries() )
       console.log(h);
     console.log(rc);
   } catch(e) {
