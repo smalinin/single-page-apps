@@ -1818,7 +1818,11 @@
 							console.log("No data returned by query");
 						}
 
-					} else {
+					} 
+					else if (resp.ststus == 403) {
+					  location.href = url; 
+					}
+					else {
 						var msg = await resp.text();
 						hideSpinner();
 						console.error('Table Refresh Failed', msg);
