@@ -15,6 +15,10 @@
 </head>
 
 <body>
+        <div id="snackbar">
+          Some text some message..
+        </div>
+
 	<!-- Button feedback spinner -->
 	<div id="spinner"></div>
 	<!-- Start of tabs container -->
@@ -357,6 +361,53 @@
 			}
 		</style>
 
+		<!-- Snackbar CSS-->
+		<style>
+			#snackbar {
+			  visibility: hidden;
+			  min-width: 250px;
+			  margin-left: -125px;
+			  background-color: #333;
+			  color: #fff;
+			  text-align: center;
+			  border-radius: 2px;
+			  padding: 16px;
+			  position: fixed;
+			  z-index: 1;
+			  left: 50%;
+			  bottom: 30px;
+			  font-size: 17px;
+			}
+			
+			#snackbar.show {
+			  visibility: visible;
+			  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			}
+			
+			@-webkit-keyframes fadein {
+			  from {bottom: 0; opacity: 0;} 
+			  to {bottom: 30px; opacity: 1;}
+			}
+			
+			@keyframes fadein {
+			  from {bottom: 0; opacity: 0;}
+			  to {bottom: 30px; opacity: 1;}
+			}
+			
+			@-webkit-keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;} 
+			  to {bottom: 0; opacity: 0;}
+			}
+			
+			@keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;}
+			  to {bottom: 0; opacity: 0;}
+			}
+		</style>
+
+
+
 		<!-- Spinner Javascript -->
 		<script>
 			function showSpinner() {
@@ -365,6 +416,14 @@
 
 			function hideSpinner() {
 				DOC.iSel("spinner").className = DOC.iSel("spinner").className.replace("show", "");
+			}
+
+
+			function showSnackbar(text) {
+				var x = document.getElementById("snackbar");
+				x.innerText = text;
+				x.className = "show";
+				setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
 			}
 
 
@@ -1819,14 +1878,12 @@
 						}
 
 					} 
-					else if (resp.status == 403) {
-					  location.href = url; 
-					}
 					else {
 						var msg = await resp.text();
 						hideSpinner();
 						console.error('Table Refresh Failed', msg);
-						alert('Table Refresh Failed ' + msg);
+						showSnackbar('Table Refresh Failed.  Error: '+resp.status);
+						//alert('Table Refresh Failed ' + msg);
 					}
 
 				} catch (e) {
