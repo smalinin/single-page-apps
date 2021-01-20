@@ -420,10 +420,12 @@
 
 
 			function showSnackbar(text) {
+			        const tm = 5000;
 				var x = document.getElementById("snackbar");
 				x.innerText = text;
 				x.className = "show";
-				setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+				setTimeout(function(){ x.className = x.className.replace("show", ""); }, tm);
+				sleep(tm);
 			}
 
 
