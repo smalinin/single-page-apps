@@ -1346,16 +1346,15 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error("Error: " + msg)
-						showSnackbar('Table Size Failed Err:'+resp.status);
+						showSnackbar('Table Size Failed Err:'+resp.status+' '+resp.statusText);
 						//??alert("Error: " + msg);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Size Failed', e);
-//??
 					showSnackbar('Table Size Failed');
-					//alert('Table Size Failed ' + e);
+					//??alert('Table Size Failed ' + e);
 				}
 			}
 		</script>
@@ -1885,14 +1884,13 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error('Table Refresh Failed', msg);
-						showSnackbar('Table Refresh Failed.  Error: '+resp.status);
+						showSnackbar('Table Refresh Failed.  Error: '+resp.status+' '+resp.statusText);
 						//alert('Table Refresh Failed ' + msg);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Refresh Failed', e);
-					//??
 					showSnackbar('Table Refresh Failed.');
 					//??alert('Table Refresh Failed ' + e);
 				}
@@ -2054,6 +2052,7 @@
 					}
 				} catch (e) {
 					hideSpinner();
+//??
 					console.error('Request Failed ' + e);
 					alert('Delete Failed ' + e)
 				}
@@ -2135,7 +2134,8 @@
 				}
 				catch (e) {
 					console.error('Request failed', e)
-					alert('Request failed ', e)
+					showSnackbar('Request failed. Could not fetch profile: '+url);
+					//??alert('Request failed ', e)
 					return null;
 				}
 			}
