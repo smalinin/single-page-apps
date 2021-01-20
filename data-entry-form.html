@@ -1346,7 +1346,8 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error("Error: " + msg)
-						alert("Error: " + msg);
+						showSnackbar('Table Size Failed Err:'+resp.status);
+						//??alert("Error: " + msg);
 					}
 
 				} catch (e) {
