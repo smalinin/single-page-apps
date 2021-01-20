@@ -418,14 +418,15 @@
 				DOC.iSel("spinner").className = DOC.iSel("spinner").className.replace("show", "");
 			}
 
+			const delay = ms => new Promise(res => setTimeout(res, ms));
 
-			function showSnackbar(text) {
+			async function showSnackbar(text) {
 			        const tm = 5000;
 				var x = document.getElementById("snackbar");
 				x.innerText = text;
 				x.className = "show";
 				setTimeout(function(){ x.className = x.className.replace("show", ""); }, tm);
-				sleep(tm);
+				await delay(tm);
 			}
 
 
@@ -1348,14 +1349,14 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error("Error: " + msg)
-						showSnackbar('Table Size Failed Err:'+resp.status+' '+resp.statusText);
+						await showSnackbar('Table Size Failed Err:'+resp.status+' '+resp.statusText);
 						//??alert("Error: " + msg);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Size Failed', e);
-					showSnackbar('Table Size Failed');
+					await showSnackbar('Table Size Failed');
 					//??alert('Table Size Failed ' + e);
 				}
 			}
@@ -1886,14 +1887,14 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error('Table Refresh Failed', msg);
-						showSnackbar('Table Refresh Failed.  Error: '+resp.status+' '+resp.statusText);
+						await showSnackbar('Table Refresh Failed.  Error: '+resp.status+' '+resp.statusText);
 						//alert('Table Refresh Failed ' + msg);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Refresh Failed', e);
-					showSnackbar('Table Refresh Failed.');
+					await showSnackbar('Table Refresh Failed.');
 					//??alert('Table Refresh Failed ' + e);
 				}
 				await setTableSize();
@@ -2136,7 +2137,7 @@
 				}
 				catch (e) {
 					console.error('Request failed', e)
-					showSnackbar('Request failed. Could not fetch profile: '+url);
+					await showSnackbar('Request failed. Could not fetch profile: '+url);
 					//??alert('Request failed ', e)
 					return null;
 				}
