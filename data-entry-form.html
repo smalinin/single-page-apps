@@ -1352,7 +1352,9 @@
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Size Failed', e);
-					alert('Table Size Failed ' + e);
+//??
+					showSnackbar('Table Size Failed');
+					//alert('Table Size Failed ' + e);
 				}
 			}
 		</script>
@@ -1889,7 +1891,9 @@
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Refresh Failed', e);
-					alert('Table Refresh Failed ' + e);
+					//??
+					showSnackbar('Table Refresh Failed.');
+					//??alert('Table Refresh Failed ' + e);
 				}
 				await setTableSize();
 				await buttonDisplay();
