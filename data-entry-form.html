@@ -16,7 +16,8 @@
 
 <body>
         <div id="snackbar">
-          Some text some message..
+          <div id="msg1">Some text some message.. </div>
+          <div id="msg2">Some text some message.. </div>
         </div>
 
 	<!-- Button feedback spinner -->
@@ -420,10 +421,12 @@
 
 			const delay = ms => new Promise(res => setTimeout(res, ms));
 
-			async function showSnackbar(text) {
+			async function showSnackbar(text1, text2) {
 			        const tm = 5000;
-				var x = document.getElementById("snackbar");
-				x.innerText = text;
+				var x = DOC.iSel("snackbar");
+				DOC.qSel("#snackbar #msg1").innertText = text1;
+				DOC.qSel("#snackbar #msg2").innertText = text2 ? text2 : '';
+				//x.innerText = text;
 				x.className = "show";
 				setTimeout(function(){ x.className = x.className.replace("show", ""); }, tm);
 				await delay(tm);
@@ -1351,14 +1354,14 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error("Error: " + msg)
-						await showSnackbar(`Table Size Failed Error: ${resp.status} ${resp.statusText}`);
+						await showSnackbar('Table Size Failed', `Sparql endpoint Error: ${resp.status} ${resp.statusText}`);
 						//??alert("Error: " + msg);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Size Failed', e);
-					await showSnackbar(`Table Size Failed Error: ${resp.status} ${resp.statusText}`);
+					await showSnackbar('Table Size Failed', `Sparql endpoint Error: ${resp.status} ${resp.statusText}`);
 					//??alert('Table Size Failed ' + e);
 				}
 			}
