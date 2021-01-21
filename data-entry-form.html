@@ -1334,8 +1334,10 @@
 					crossDomain: true,
 				};
 
+				var resp;
 				try {
 					var resp = await fetch(url, options)
+					
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
 
@@ -1349,14 +1351,14 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error("Error: " + msg)
-						await showSnackbar('Table Size Failed Err:'+resp.status+' '+resp.statusText);
+						await showSnackbar(`Table Size Failed Error: {resp.status} {resp.statusText}`);
 						//??alert("Error: " + msg);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Size Failed', e);
-					await showSnackbar('Table Size Failed');
+					await showSnackbar(`Table Size Failed Error: {resp.status} {resp.statusText}`);
 					//??alert('Table Size Failed ' + e);
 				}
 			}
