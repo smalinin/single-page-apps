@@ -16,8 +16,8 @@
 
 <body>
         <div id="snackbar">
-          <div id="msg1">Some text some message.. </div>
-          <div id="msg2">Some text some message.. </div>
+          <div id="msg1"></div>
+          <div id="msg2"></div>
         </div>
 
 	<!-- Button feedback spinner -->
@@ -424,8 +424,8 @@
 			async function showSnackbar(text1, text2) {
 			        const tm = 5000;
 				var x = DOC.iSel("snackbar");
-				DOC.qSel("#snackbar #msg1").innertText = text1;
-				DOC.qSel("#snackbar #msg2").innertText = text2 ? text2 : '';
+				DOC.qSel("#snackbar #msg1").innerText = text1;
+				DOC.qSel("#snackbar #msg2").innerText = text2 ? text2 : '';
 				//x.innerText = text;
 				x.className = "show";
 				setTimeout(function(){ x.className = x.className.replace("show", ""); }, tm);
