@@ -648,7 +648,7 @@
 						loggedHref.href = webid
 						loggedHref.title = webid
 
-						var rc = await fetchProfile(webid);
+						var rc = await loadProfile(webid);
 						if (rc) {
 						  this.solid_storage = rc.store;
 						  this.is_solid_id = rc.is_solid_id;
@@ -1339,7 +1339,7 @@
 
 				var resp;
 				try {
-					var resp = await fetch(url, options)
+					resp = await fetch(url, options)
 					
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1354,15 +1354,13 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error("Error: " + msg)
-						await showSnackbar('Table Size Failed', `Sparql endpoint Error: ${resp.status} ${resp.statusText}`);
-						//??alert("Error: " + msg);
+						await showSnackbar('Table Size Failed', `SPARQL endpoint Error: ${resp.status} ${resp.statusText}`);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Size Failed', e);
-					await showSnackbar('Table Size Failed', `Sparql endpoint Error: ${resp.status} ${resp.statusText}`);
-					//??alert('Table Size Failed ' + e);
+					await showSnackbar('Table Size Failed', `SPARQL endpoint Error: ${resp.status} ${resp.statusText}`);
 				}
 			}
 		</script>
@@ -1409,20 +1407,21 @@
 					body: insert_cmd,
 				};
 
+				var resp;
 				try {
-					var resp = await fetch(url, options);
+					resp = await fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
 						updateTable();
 						hideSpinner();
 					} else {
-						throw new Error("Error " + resp.status + " - " + resp.statusText);
+						throw new Error(`Error ${resp.status} - ${resp.statusText}`);
 						hideSpinner();
 					}
 				} catch (e) {
 					hideSpinner();
 					console.error('Insert Failed', e);
-					alert('Insert Failed ' + e)
+					showSnackbar('Insert Failed', ''+e);
 				}
 				await setTableSize();
 				await buttonDisplay();
@@ -1466,21 +1465,23 @@
 					crossDomain: true,
 					body: delete_cmd,
 				};
+
+				var resp;
 				try {
-					var resp = await fetch(url, options);
+					resp = await fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
 						updateTable();
 						hideSpinner();
 					}
 					else {
-						throw new Error("Error " + resp.status + " - " + resp.statusText);
+						throw new Error(`Error ${resp.status} - ${resp.statusText}`);
 						hideSpinner();
 					}
 				} catch (e) {
 					hideSpinner();
 					console.error('Delete Failed', e);
-					alert('Delete Failed ' + e)
+					showSnackbar('Delete Failed', ''+e);
 				}
 				await setTableSize();
 				await buttonDisplay();
@@ -1586,8 +1587,10 @@
 					mode: 'cors',
 					crossDomain: true,
 				};
+
+				var resp;
 				try {
-					var resp = await fetch(url, options)
+					resp = await fetch(url, options)
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
 
@@ -1629,6 +1632,7 @@
 						hideSpinner();
 						console.error('Query Failed', msg);
 						alert('Query Failed ' + msg)
+//???
 					}
 
 				} catch (e) {
@@ -1703,8 +1707,10 @@
 					mode: 'cors',
 					crossDomain: true,
 				};
+
+				var resp;
 				try {
-					var resp = await fetch(url, options)
+					resp = await fetch(url, options)
 
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1764,7 +1770,9 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error('Query Failed', msg);
+
 						alert('Query Failed ' + msg)
+//??
 					}
 
 				} catch (e) {
@@ -1775,6 +1783,7 @@
 				await setTableSize();
 				await buttonDisplay();
 			}
+
 
 			// This function fetches the query results and returns them in json
 			async function updateTable() {
@@ -1833,8 +1842,9 @@
 					crossDomain: true,
 				};
 
+				var resp;
 				try {
-					var resp = await fetch(url, options)
+					resp = await fetch(url, options)
 
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1892,19 +1902,18 @@
 						var msg = await resp.text();
 						hideSpinner();
 						console.error('Table Refresh Failed', msg);
-						await showSnackbar('Table Refresh Failed.  Error: '+resp.status+' '+resp.statusText);
-						//alert('Table Refresh Failed ' + msg);
+					        await showSnackbar('Table Refresh Failed', `SPARQL endpoint Error: ${resp.status} ${resp.statusText}`);
 					}
 
 				} catch (e) {
 					hideSpinner();
 					console.error('Table Refresh Failed', e);
-					await showSnackbar('Table Refresh Failed.');
-					//??alert('Table Refresh Failed ' + e);
+					await showSnackbar('Table Refresh Failed', `SPARQL endpoint Error: ${resp.status} ${resp.statusText}`);
 				}
 				await setTableSize();
 				await buttonDisplay();
 			}
+
 
 			// This function gets the range of the predicate to determine if object is a literal or a reference
 			async function predicateRange() {
@@ -1940,19 +1949,20 @@
 					crossDomain: true,
 				};
 
+				var resp;
 				try {
-					const resp = await fetch(url, options); // resp awaits completion of fetch
+					resp = await fetch(url, options); // resp awaits completion of fetch
 
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
 					} else {
-						throw new Error("Error " + resp.status + " - " + resp.statusText);
+						throw new Error(`Error ${resp.status} - ${resp.statusText}`);
 					}
 					const json = await resp.json(); // constant awaits resp before being assigned (so it isn't assigned as a promise)
 					return (json.boolean); // returns true or false returned by query after awaiting results
 				} catch (e) {
 					console.error('Predicate Range Lookup Failed', e);
-					alert('Predicate Range Lookup Failed ' + e)
+					showSnackbar('Predicate Range Lookup Failed', ''+e);
 				}
 			}
 
@@ -1987,8 +1997,9 @@
 					body: turtle_cmd,
 				};
 
+				var resp;
 				try {
-					var resp = await authClient.authFetch(url, options);
+					resp = await authClient.authFetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						hideSpinner();
 						console.log(resp.status + " - " + resp.statusText);
@@ -1996,12 +2007,12 @@
 					}
 					else {
 						hideSpinner();
-						throw new Error("Error " + resp.status + " - " + resp.statusText);
+						throw new Error(`Error ${resp.status} - ${resp.statusText}`);
 					}
 				} catch (e) {
 					hideSpinner();
+					showSnackbar('Insert Failed', ''+e);
 					console.error('Insert Failed ' + e);
-					alert('Insert Failed ' + e)
 				}
 				await setTableSize();
 				await buttonDisplay();
@@ -2048,21 +2059,21 @@
 					body: del_cmd,
 				};
 
+				var resp;
 				try {
-					var resp = await authClient.authFetch(url, options);
+					resp = await authClient.authFetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						hideSpinner();
 						console.log(resp.status + " - " + resp.statusText);
 						updateTable();
 					}
 					else {
-						throw new Error("Error " + resp.status + " - " + resp.statusText);
+						throw new Error(`Error ${resp.status} - ${resp.statusText}`);
 					}
 				} catch (e) {
 					hideSpinner();
-//??
-					console.error('Request Failed ' + e);
-					alert('Delete Failed ' + e)
+					console.error('Delete Failed ' + e);
+					showSnackbar('Delete Failed', ''+e);
 				}
 				await setTableSize();
 				await buttonDisplay();
@@ -2074,9 +2085,9 @@
 		<!-- These functions are used for Authentication -->
 		<script>
 
-			async function fetchProfile(webId) {
+			async function loadProfile(webId) {
 				try {
-					var rc = await loadProfile(webId);
+					var rc = await fetchProfile(webId);
 					if (!rc)
 					  return null;
 
@@ -2114,11 +2125,12 @@
 				} catch (e) {
 					console.error('Error', e)
 					alert('Error ', e)
+//??
 					return null;
 				}
 			}
 
-			async function loadProfile(url) {
+			async function fetchProfile(url) {
 			    if (!url.startsWith('https://'))
 			      return null;
 
@@ -2129,8 +2141,10 @@
 					mode: 'cors',
 					crossDomain: true,
 				};
+
+				var resp;
 				try {
-					var resp = await authClient.authFetch(url, options);
+					resp = await authClient.authFetch(url, options);
 					if (resp.ok) {
 						var body = await resp.text();
 						var contentType = resp.headers.get('content-type');
@@ -2142,8 +2156,7 @@
 				}
 				catch (e) {
 					console.error('Request failed', e)
-					await showSnackbar('Request failed. Could not fetch profile: '+url);
-					//??alert('Request failed ', e)
+					await showSnackbar('Request failed.', 'Could not fetch profile: '+url);
 					return null;
 				}
 			}
