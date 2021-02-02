@@ -457,6 +457,10 @@
 
 				  if (!this.lastState.tab && (this.lastState.tab !== "dbms"  || this.lastState.tab !== "fs"))
 				  	this.lastState.tab = "dbms";
+
+				  if (this.lastState.endpoint)
+				     DOC.iSel("sparql_endpoint").value = this.lastState.endpoint;
+
 				} catch(e) {}
 
 				var queryString = window.location.search;
@@ -514,6 +518,9 @@
 				var documentName = this.checkId("docNameID", "docNameID2");
 				var endpoint = DOC.iSel('sparql_endpoint');
 				var tab = "";
+
+				if (endpoint.value)
+				  this.lastState.endpoint = endpoint.value;
 
 				this.lastState.documentName = documentName.value;
 				sessionStorage.setItem('lastState', JSON.stringify(this.lastState));
@@ -669,7 +676,7 @@
 					this.webid = null;
 					sessionStorage.removeItem('solid_storage');
 				}
-				updateTable();
+				click_updateTable();
 			  }
 
 			}
@@ -700,8 +707,8 @@
 				DOC.iSel('clearBtnID').onclick = () => { state.clearInput() }
 				DOC.iSel('insertBtnID').onclick = () => { recordGen() }
 				DOC.iSel('deleteBtnID').onclick = () => { recordDel() }
-				DOC.iSel('queryBtnID').onclick = () => { queryGen() }
-				DOC.iSel('dataBtnID').onclick = () => { updateTable() }
+				DOC.iSel('queryBtnID').onclick = () => { click_queryGen() }
+				DOC.iSel('dataBtnID').onclick = () => { click_updateTable() }
 
 				DOC.iSel('firstBtnID').onclick = () => { first() }
 				DOC.iSel('prevBtnID').onclick = () => { previous() }
@@ -717,8 +724,8 @@
 				DOC.iSel('clearBtnID2').onclick = () => { state.clearInput() }
 				DOC.iSel('insertBtnID2').onclick = () => { turtleGen() }
 				DOC.iSel('deleteBtnID2').onclick = () => { turtleDel() }
-				DOC.iSel('queryBtnID2').onclick = () => { queryGen() }
-				DOC.iSel('dataBtnID2').onclick = () => { updateTable() }
+				DOC.iSel('queryBtnID2').onclick = () => { click_queryGen() }
+				DOC.iSel('dataBtnID2').onclick = () => { click_updateTable() }
 
 				DOC.iSel('firstBtnID2').onclick = () => { first() }
 				DOC.iSel('prevBtnID2').onclick = () => { previous() }
@@ -733,7 +740,7 @@
 					var prevTab = $(event.relatedTarget).text();
 					if (currTab != "About" && prevTab != "About") {
 						state.updatePermalink();
-						updateTable();
+						click_updateTable();
 					}
 				});
 
@@ -1645,6 +1652,11 @@
 			}
 
 			// This function updates table to show results of a query
+			function click_queryGen() {
+				offset = Number("0");
+				queryGen();
+			}
+
 			async function queryGen() {
 				resultMode = "query";
 				await setLimit();
@@ -1786,6 +1798,11 @@
 
 
 			// This function fetches the query results and returns them in json
+			function click_updateTable() {
+				offset = Number("0");
+				updateTable();
+			}
+
 			async function updateTable() {
 				resultMode = "all";
 				var graph = state.checkValue("docNameID", "docNameID2");
