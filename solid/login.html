@@ -168,22 +168,6 @@
           }
         });
 ***/
-      const session = new solidClientAuthentication.Session();
-      // When loading the page, check if you are being redirected from the IdP
-      session
-        .handleIncomingRedirect(window.location.href)
-        .then((sessionInfo) => {
-          if(!sessionInfo.isLoggedIn) {
-            // If you are not logged in, initiate the login
-            session.login({
-              redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
-              oidcIssuer: "https://solid.openlinksw.com:8443",
-            });
-          } else {
-            // The page was loaded after a redirect from the IdP
-            document.getElementById("WebId").innerHTML = sessionInfo.webId;
-          }
-        });
 
 
 
