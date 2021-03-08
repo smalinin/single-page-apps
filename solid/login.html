@@ -251,11 +251,28 @@
           oidcIssuer: provider,
           clientName: "Test Demo"
         });
-**/
+
         session.login({
           redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
           oidcIssuer: "https://solid.openlinksw.com:8443",
         });
+**/
+
+      session
+        .handleIncomingRedirect(window.location.href)
+        .then((sessionInfo) => {
+          if(!sessionInfo.isLoggedIn) {
+            // If you are not logged in, initiate the login
+            session.login({
+              redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
+              oidcIssuer: "https://solid.openlinksw.com:8443",
+            });
+          } else {
+            // The page was loaded after a redirect from the IdP
+            console.log("WebId ="+ sessionInfo.webId);
+          }
+        });
+
 
      } else {
         // The page was loaded after a redirect from the IdP
