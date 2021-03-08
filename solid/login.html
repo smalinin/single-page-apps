@@ -170,7 +170,7 @@
 ***/
 
 
-
+/***
 //??  const client = new solidClientAuthentication();
   const client = solidClientAuthentication;
 //--  const session = new solidClientAuthentication.Session();
@@ -181,7 +181,7 @@
     },
     "myLocalSessId"
   );
-
+***/
 
   var url = new URL(window.location.href)
   url.hash = ''
@@ -239,7 +239,9 @@
   function login (provider) {
 
 //    const session = new client.Session();
-    const session = sess;
+//    const session = sess;
+
+    const session = new solidClientAuthentication.Session();
 
     document.getElementById('custom-idp').value = provider;
 
