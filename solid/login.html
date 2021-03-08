@@ -204,6 +204,10 @@
   document.addEventListener('DOMContentLoaded', async () => {
     initButtons()
 
+      show('logged')
+      show('logout')
+
+/***
     if (authCode) {
       sessInfo = await client.handleIncomingRedirect(window.location.href);
     }
@@ -214,9 +218,6 @@
     if (window.location.hash === '#relogin') {
       await client.logout();
     }
-
-      show('logged')
-      show('logout')
 
     // Check if user is already logged in
 //    const defSession = client.getDefaultSession();
@@ -232,7 +233,7 @@
         }
       }, 3000);
     }
-
+***/
   })
 
   async function login (provider) {
