@@ -161,16 +161,18 @@
     "myLocalSessId"
   );
 
-  // Lib is exported as window.OIDC
-//  const { OIDCWebClient } = OIDC
-//  const options = { solid: true }
-//  const authClient = new OIDCWebClient(options)
-  // auth is now a client instance
 
   var url = new URL(window.location.href)
   url.hash = ''
 //  const callback = url.href
   const callback = "https://smalinin.github.io/single-page-apps/solid/login.html";
+
+  const authCode =
+    new URL(window.location.href).searchParams.get("code") ||
+    // FIXME: Temporarily handle both auth code and implicit flow.
+    // Should be either removed or refactored.
+    new URL(window.location.href).searchParams.get("access_token");
+
 
   /**
    * Gets called when the page loads
@@ -178,11 +180,15 @@
   document.addEventListener('DOMContentLoaded', async () => {
     initButtons()
 
-//    await client.handleIncomingRedirect(window.location.href);
+    if (authCode) {
+      await client.handleIncomingRedirect(window.location.href);
+    }
 
     if (window.location.hash === '#relogin') {
       await client.logout();
     }
+
+      show('logout')
 
     // Check if user is already logged in
 //    const defSession = client.getDefaultSession();
