@@ -200,7 +200,7 @@
     document.getElementById('custom-idp').value = provider;
 
     try {
-     if (!session.info..isLoggedIn) {
+     if (!session.info.isLoggedIn) {
         // If you are not logged in, initiate the login
         session.login({
           redirectUrl: callback,
