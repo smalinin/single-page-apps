@@ -207,6 +207,9 @@
     if (authCode) {
       sessInfo = await client.handleIncomingRedirect(window.location.href);
     }
+    
+    sessInfo = await client.handleIncomingRedirect(window.location.href);
+
 
     if (window.location.hash === '#relogin') {
       await client.logout();
