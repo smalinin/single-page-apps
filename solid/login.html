@@ -178,7 +178,7 @@
   document.addEventListener('DOMContentLoaded', async () => {
     initButtons()
 
-    await client.handleIncomingRedirect(window.location.href);
+//    await client.handleIncomingRedirect(window.location.href);
 
     if (window.location.hash === '#relogin') {
       await client.logout();
