@@ -150,6 +150,7 @@
 </body>
 <script>
 
+/***
       const session = new solidClientAuthentication.Session();
       // When loading the page, check if you are being redirected from the IdP
       session
@@ -166,7 +167,23 @@
             document.getElementById("WebId").innerHTML = sessionInfo.webId;
           }
         });
-
+***/
+      const session = new solidClientAuthentication.Session();
+      // When loading the page, check if you are being redirected from the IdP
+      session
+        .handleIncomingRedirect(window.location.href)
+        .then((sessionInfo) => {
+          if(!sessionInfo.isLoggedIn) {
+            // If you are not logged in, initiate the login
+            session.login({
+              redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
+              oidcIssuer: "https://solid.openlinksw.com:8443",
+            });
+          } else {
+            // The page was loaded after a redirect from the IdP
+            document.getElementById("WebId").innerHTML = sessionInfo.webId;
+          }
+        });
 
 
 
@@ -194,6 +211,9 @@
     new URL(window.location.href).searchParams.get("access_token");
 
 
+  const sessInfo = null;
+
+
   /**
    * Gets called when the page loads
    */
@@ -201,7 +221,7 @@
     initButtons()
 
     if (authCode) {
-      await client.handleIncomingRedirect(window.location.href);
+      sessInfo = await client.handleIncomingRedirect(window.location.href);
     }
 
     if (window.location.hash === '#relogin') {
@@ -213,11 +233,10 @@
 
     // Check if user is already logged in
 //    const defSession = client.getDefaultSession();
-    const defSession = sess;
-    if (defSession.info.isLoggedIn && defSession.webId) {
+    if (sessInfo.isLoggedIn && sessInfo.webId) {
       show('logged')
       show('logout')
-      setField("webid", defSession.webId)
+      setField("webid", sessInfo.webId)
       setTimeout(function (){
         if (window.opener){
 //??          window.opener.location.reload();
@@ -232,21 +251,28 @@
   async function login (provider) {
 
 //    const session = new client.Session();
-    const session = sess;
+//    const session = sess;
 
     document.getElementById('custom-idp').value = provider;
 
     try {
-     if (!session.info.isLoggedIn) {
+     if (!sessInfo.isLoggedIn) {
         // If you are not logged in, initiate the login
+/**
         await session.login({
           redirectUrl: document.location.href, //callback,
           oidcIssuer: provider,
           clientName: "Test Demo"
         });
+**/
+        session.login({
+          redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
+          oidcIssuer: "https://solid.openlinksw.com:8443",
+        });
+
      } else {
         // The page was loaded after a redirect from the IdP
-        document.getElementById("WebId").innerHTML = sessionInfo.webId;
+        document.getElementById("WebId").innerHTML = sessInfo.webId;
      }
 
 //--      session = await authClient.login({mode:'redirect', 
