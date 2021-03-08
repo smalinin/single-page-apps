@@ -204,7 +204,7 @@
     try {
      if (!session.info.isLoggedIn) {
         // If you are not logged in, initiate the login
-        session.login({
+        await session.login({
           redirectUrl: callback,
           oidcIssuer: provider,
         });
