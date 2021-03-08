@@ -220,7 +220,7 @@
      if (!session.info.isLoggedIn) {
         // If you are not logged in, initiate the login
         await session.login({
-          redirectUrl: callback,
+          redirectUrl: document.location.href, //callback,
           oidcIssuer: provider,
           clientName: "Test Demo"
         });
