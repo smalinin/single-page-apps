@@ -159,7 +159,7 @@
             // If you are not logged in, initiate the login
             session.login({
               redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
-              oidcIssuer: document.getElementById("oidcIssuer").innerHTML,
+              oidcIssuer: "https://solid.openlinksw.com:8443",
             });
           } else {
             // The page was loaded after a redirect from the IdP
