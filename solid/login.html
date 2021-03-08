@@ -150,6 +150,26 @@
 </body>
 <script>
 
+      const session = new solidClientAuthentication.Session();
+      // When loading the page, check if you are being redirected from the IdP
+      session
+        .handleIncomingRedirect(window.location.href)
+        .then((sessionInfo) => {
+          if(!sessionInfo.isLoggedIn) {
+            // If you are not logged in, initiate the login
+            session.login({
+              redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
+              oidcIssuer: document.getElementById("oidcIssuer").innerHTML,
+            });
+          } else {
+            // The page was loaded after a redirect from the IdP
+            document.getElementById("WebId").innerHTML = sessionInfo.webId;
+          }
+        });
+
+
+
+
 //??  const client = new solidClientAuthentication();
   const client = solidClientAuthentication;
 //--  const session = new solidClientAuthentication.Session();
@@ -228,22 +248,6 @@
         // The page was loaded after a redirect from the IdP
         document.getElementById("WebId").innerHTML = sessionInfo.webId;
      }
-/***
-     session
-    .handleIncomingRedirect(window.location.href)
-    .then((sessionInfo) => {
-      if(!sessionInfo.isLoggedIn) {
-        // If you are not logged in, initiate the login
-        session.login({
-          redirectUrl: callback,
-          oidcIssuer: provider,
-        });
-      } else {
-        // The page was loaded after a redirect from the IdP
-        document.getElementById("WebId").innerHTML = sessionInfo.webId;
-      }
-    });
-***/
 
 //--      session = await authClient.login({mode:'redirect', 
 //--                                    provider,
