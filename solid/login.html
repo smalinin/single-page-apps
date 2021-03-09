@@ -313,11 +313,12 @@
   }
 
   function loginCustom() {
-      document.getElementById('custom-idp').value = "https://solid.openlinksw.com:8443";
-
+      var idp = document.getElementById('custom-idp').value = "https://solid.openlinksw.com:8443";
+/**
       var idp = document.getElementById('custom-idp').value
       if (idp.endsWith("/"))
         idp = idp.substring(0, idp.length - 1)
+**/
       login(idp)
   }
 
