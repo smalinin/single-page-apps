@@ -312,27 +312,14 @@
     }
   }
 
-  function loginCustom(provider) {
+  function loginCustom() {
 //      var idp = document.getElementById('custom-idp').value = "https://solid.openlinksw.com:8443";
-/**
+
       var idp = document.getElementById('custom-idp').value
       if (idp.endsWith("/"))
         idp = idp.substring(0, idp.length - 1)
 
       login(idp)
-**/
-
-    document.getElementById('custom-idp').value = provider;
-
-    try {
-    
-     mlogin();
-
-    } catch (error) {
-      console.log('Error logging in:')
-      console.error(error)
-      console.log('Make sure this page is served via HTTPS, otherwise browser will block it')
-    }
   }
 
 
@@ -356,8 +343,7 @@
     initButton('login_opl_uriburner', () => login('https://linkeddata.uriburner.com'))
     initButton('login_opl_myopl', () => login('https://id.myopenlink.net'))
 
-//    initButton('login-custom', () => loginCustom("https://solid.openlinksw.com:8443"))
-    initButton('login_test_space', () => login("https://solid.openlinksw.com:8443"))
+    initButton('login-custom', () => loginCustom("https://solid.openlinksw.com:8443"))
 
     initButton('logout', () => logout())
   }
