@@ -206,19 +206,20 @@
   document.addEventListener('DOMContentLoaded', async () => {
     initButtons()
 
+    var session = null;
+
     if (authCode) {
       sessInfo = await client.handleIncomingRedirect(window.location.href);
+    } else {
+      session = client.getDefaultSession();
+      sessInfo = session.info;
     }
     
-    sessInfo = await client.handleIncomingRedirect(window.location.href);
-
-
     if (window.location.hash === '#relogin') {
       await client.logout();
     }
 
     // Check if user is already logged in
-//    const defSession = client.getDefaultSession();
     if (sessInfo.isLoggedIn && sessInfo.webId) {
       show('logged')
       show('logout')
@@ -227,7 +228,7 @@
         if (window.opener){
 //??          window.opener.location.reload();
 //??          close();
-           alert(defSession.webId);
+           alert("OK= "+sessInfo.webId);
         }
       }, 3000);
     }
@@ -248,51 +249,11 @@
           oidcIssuer: provider,
 //          clientName: "Test Demo"
         });
-/***
-        session.login({
-          redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
-          oidcIssuer: "https://solid.openlinksw.com:8443",
-        });
-
-      session
-        .handleIncomingRedirect(window.location.href)
-        .then((sessionInfo) => {
-          if(!sessionInfo.isLoggedIn) {
-            // If you are not logged in, initiate the login
-            session.login({
-              redirectUrl: "https://smalinin.github.io/single-page-apps/solid/login.html",
-              oidcIssuer: "https://solid.openlinksw.com:8443",
-            });
-          } else {
-            // The page was loaded after a redirect from the IdP
-            console.log("WebId ="+ sessionInfo.webId);
-          }
-        });
-***/
-
      } 
      else {
         // The page was loaded after a redirect from the IdP
         document.getElementById("WebId").innerHTML = sessInfo.webId;
      }
-
-//--      session = await authClient.login({mode:'redirect', 
-//--                                    provider,
-//--                                    redirect_uri:callback})
-    } catch (error) {
-      console.log('Error logging in:')
-      console.error(error)
-      console.log('Make sure this page is served via HTTPS, otherwise browser will block it')
-    }
-  }
-
-  function login0 (provider) {
-
-    document.getElementById('custom-idp').value = provider;
-
-    try {
-    
-     mlogin();
 
     } catch (error) {
       console.log('Error logging in:')
