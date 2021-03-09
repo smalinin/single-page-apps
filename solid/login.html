@@ -312,7 +312,7 @@
     }
   }
 
-  function loginCustom() {
+  function loginCustom(provider) {
 //      var idp = document.getElementById('custom-idp').value = "https://solid.openlinksw.com:8443";
 /**
       var idp = document.getElementById('custom-idp').value
@@ -321,6 +321,8 @@
 
       login(idp)
 **/
+
+    document.getElementById('custom-idp').value = provider;
 
     try {
     
@@ -354,7 +356,7 @@
     initButton('login_opl_uriburner', () => login('https://linkeddata.uriburner.com'))
     initButton('login_opl_myopl', () => login('https://id.myopenlink.net'))
 
-    initButton('login-custom', () => loginCustom())
+    initButton('login-custom', () => loginCustom("https://solid.openlinksw.com:8443"))
 
     initButton('logout', () => logout())
   }
