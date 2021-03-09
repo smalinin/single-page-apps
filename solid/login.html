@@ -177,7 +177,7 @@
 
 
   var sessInfo = null;
-  var msess = null;
+  var session = null;
 
 
   /**
@@ -185,13 +185,11 @@
    */
   document.addEventListener('DOMContentLoaded', async () => {
     initButtons()
-//-----------------------
-    //msess = new client.Session({}, "mySessionId");
 
 
+    session = new client.Session({}, "mySessionId");
 
-//------------------------
-
+/***
     if (authCode) {
       sessInfo = await client.handleIncomingRedirect(window.location.href);
     } else {
@@ -199,6 +197,11 @@
 //      session = client.getDefaultSession();
       sessInfo = session.info;
     }
+***/
+    await session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
+    sessInfo = session.info;
+
+
     
     if (window.location.hash === '#relogin') {
       await client.logout();
@@ -220,10 +223,6 @@
   })
 
   async function login (provider) {
-
-    if (!session)
-      session = new client.Session({}, "mySessionId");
-//      session = new client.Session();
 
     document.getElementById('custom-idp').value = provider;
 
