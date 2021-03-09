@@ -149,8 +149,8 @@
 
 </body>
 <script>
-
-/***
+  function mlogin() 
+  {
       const session = new solidClientAuthentication.Session();
       // When loading the page, check if you are being redirected from the IdP
       session
@@ -167,7 +167,8 @@
             document.getElementById("WebId").innerHTML = sessionInfo.webId;
           }
         });
-***/
+  }
+  
 
 
 /***
@@ -236,7 +237,7 @@
 ***/
   })
 
-  function login (provider) {
+  function login0 (provider) {
 
 //    const session = new client.Session();
 //    const session = sess;
@@ -294,6 +295,22 @@
     }
   }
 
+  function login (provider) {
+
+    document.getElementById('custom-idp').value = provider;
+
+    try {
+    
+     mlogin();
+
+    } catch (error) {
+      console.log('Error logging in:')
+      console.error(error)
+      console.log('Make sure this page is served via HTTPS, otherwise browser will block it')
+    }
+  }
+
+  
   function logout () {
     console.log('Logging out...')
     client.getDefaultSession().logout();
