@@ -185,7 +185,7 @@
       var session = await solidAuthFetcher.login({
           oidcIssuer: "https://solid.openlinksw.com:8443", //provider,
           popUp: false,
-          redirectUrl: window.location.href
+          redirect: window.location.href
         })
 
     } catch (error) {
