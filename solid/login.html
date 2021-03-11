@@ -191,6 +191,8 @@
       window.location.reload();
     }
 
+    try {
+
 //    session = new client.Session({}, "mySessionId");
 
 /***
@@ -212,9 +214,11 @@
 
 
 
-    await session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
-    sessInfo = session.info;
-
+//    await session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
+ //   sessInfo = session.info;
+    } catch(e) {
+      console.log('==>'+e);
+    }
 
     
     // Check if user is already logged in
