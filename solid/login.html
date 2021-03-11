@@ -164,10 +164,10 @@
   );
 ***/
 
-  var url = new URL(window.location.href)
-  url.hash = ''
-//  const callback = url.href
-  const callback = "https://smalinin.github.io/single-page-apps/solid/login.html";
+//  var url = new URL(window.location.href)
+//  url.hash = ''
+  const callback = window.location.href
+//??  const callback = "https://smalinin.github.io/single-page-apps/solid/login.html";
 
   const authCode =
     new URL(window.location.href).searchParams.get("code") ||
@@ -186,8 +186,12 @@
   document.addEventListener('DOMContentLoaded', async () => {
     initButtons()
 
+    if (window.location.hash === '#relogin') {
+      await client.logout();
+      window.location.reload();
+    }
 
-    session = new client.Session({}, "mySessionId");
+//    session = new client.Session({}, "mySessionId");
 
 /***
     if (authCode) {
@@ -198,15 +202,21 @@
       sessInfo = session.info;
     }
 ***/
+    if (authCode) {
+      sessInfo = await client.handleIncomingRedirect(window.location.href);
+      session = client.getDefaultSession();
+    } else {
+      await session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
+      sessInfo = session.info;
+    }
+
+
+
     await session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
     sessInfo = session.info;
 
 
     
-    if (window.location.hash === '#relogin') {
-      await client.logout();
-    }
-
     // Check if user is already logged in
     if (sessInfo.isLoggedIn && sessInfo.webId) {
       show('logged')
@@ -222,6 +232,7 @@
     }
   })
 
+
   async function login (provider) {
 
     document.getElementById('custom-idp').value = provider;
@@ -232,8 +243,7 @@
         // If you are not logged in, initiate the login
         await session.login({
           redirectUrl: document.location.href, //callback,
-          oidcIssuer: provider,
-//          clientName: "Test Demo"
+          oidcIssuer: provider
         });
      } 
      else {
@@ -260,7 +270,11 @@
   
   function logout () {
     console.log('Logging out...')
-    client.getDefaultSession().logout();
+    if (session) {
+      session.logout();
+//    client.getDefaultSession().logout();
+      window.location.reload();
+    }
     hide('logged')
     hide('logout')
   }
