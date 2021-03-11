@@ -192,9 +192,8 @@
       setField("webid", sessInfo.webId)
       setTimeout(function (){
         if (window.opener){
-//??          window.opener.location.reload();
-//??          close();
-           alert("OK= "+sessInfo.webId);
+          window.opener.location.reload();
+          close();
         }
       }, 3000);
     }
