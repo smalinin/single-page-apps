@@ -153,21 +153,6 @@
   const client = solidClientAuthentication;
   var session = null;
 
-/***
-//--  const session = new solidClientAuthentication.Session();
-
-  const sess =  new client.Session(
-    {
-      clientAuthentication: client.getClientAuthenticationWithDependencies({}),
-    },
-    "myLocalSessId"
-  );
-***/
-
-//  var url = new URL(window.location.href)
-//  url.hash = ''
-  const callback = window.location.href
-//??  const callback = "https://smalinin.github.io/single-page-apps/solid/login.html";
 
   const authCode =
     new URL(window.location.href).searchParams.get("code") ||
@@ -191,19 +176,6 @@
       window.location.reload();
     }
 
-    try {
-
-//    session = new client.Session({}, "mySessionId");
-
-/***
-    if (authCode) {
-      sessInfo = await client.handleIncomingRedirect(window.location.href);
-    } else {
-      session = new client.Session({}, "mySessionId");
-//      session = client.getDefaultSession();
-      sessInfo = session.info;
-    }
-***/
     if (authCode) {
       sessInfo = await client.handleIncomingRedirect(window.location.href);
       session = client.getDefaultSession();
@@ -213,15 +185,6 @@
       sessInfo = session.info;
     }
 
-
-
-//    await session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
- //   sessInfo = session.info;
-    } catch(e) {
-      console.log('==>'+e);
-    }
-
-    
     // Check if user is already logged in
     if (sessInfo.isLoggedIn && sessInfo.webId) {
       show('logged')
@@ -247,7 +210,7 @@
      {
         // If you are not logged in, initiate the login
         await session.login({
-          redirectUrl: document.location.href, //callback,
+          redirectUrl: window.location.href,
           oidcIssuer: provider
         });
      } 
@@ -277,7 +240,6 @@
     console.log('Logging out...')
     if (session) {
       session.logout();
-//    client.getDefaultSession().logout();
       window.location.reload();
     }
     hide('logged')
