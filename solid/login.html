@@ -150,6 +150,10 @@
 </body>
 <script>
 
+  var url = new URL(window.location.href)
+  url.hash = ''
+  const callback = url.href
+
   /**
    * Gets called when the page loads
    */
@@ -164,17 +168,22 @@
 
     // Check if user is already logged in
     if (session && session.loggedIn && session.webId) {
+      loggedIn(session.webId);
+    }
+  })
+
+
+  function loggedIn(webId) {
       show('logged')
       show('logout')
-      setField("webid", session.webId)
+      setField("webid", webId)
       setTimeout(function (){
         if (window.opener){
           window.opener.location.reload();
           close();
         }
       }, 3000);
-    }
-  })
+  }
 
 
   async function login (provider) {
@@ -185,9 +194,12 @@
       var session = await solidAuthFetcher.login({
           oidcIssuer: provider,
           popUp: false,
-          redirect: window.location.href
+          redirect: callback
         })
 
+      if (session && session.loggedIn && session.webId) {
+        loggedIn(session.webId);
+      }
     } catch (error) {
       console.log('Error logging in:')
       console.error(error)
