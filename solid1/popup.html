@@ -18,6 +18,10 @@
 </body>
 <script>
 //  solidAuthFetcher.handlePopUpRedirect()
-  solidAuthFetcher.handleRedirect(window.location.href)
+  document.addEventListener('DOMContentLoaded', async () => {
+    var info = await solidAuthFetcher.handleRedirect(window.location.href)
+    console.log(info);
+    console.log("END");
+  })
 </script>
 </html>
