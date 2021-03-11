@@ -686,13 +686,15 @@
 		<!-- These Functions Modify the Onscreen Display -->
 		<script>
 			var state = new State();
-                        const authClient = solidClientAuthentication;
-                        const oidc_session = new authClient.Session();
-                        await oidc_session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
+			const authClient = solidClientAuthentication;
+			const oidc_session = new authClient.Session();
 
 
 			//Tooltip activation function
-			$(document).ready(function () {
+			$(document).ready(async function () {
+
+				await oidc_session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
+
 				$('[data-toggle="tooltip"]').tooltip({
 					placement: 'right'
 				});
