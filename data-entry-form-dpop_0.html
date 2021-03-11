@@ -2183,13 +2183,15 @@
 			}
 
 			async function authLogin() {
-				const url = "./solid/login.html#relogin";
-				const width = 650;
-				const height = 400;
-				const left = window.screenX + (window.innerWidth - width) / 2;
-				const top = window.screenY + (window.innerHeight - height) / 2;
-				const settings = `width=${width},height=${height},left=${left},top=${top}`;
-				var win = window.open(url, 'Login', settings);
+				var URI = new URL("./solid/popup.html", window.location.href);
+
+				var session = await solidAuthFetcher.login({
+                                  oidcIssuer: "https://solid.openlinksw.com:8443",
+                                  popUp: true,
+                                  popUpRedirectPath: URI.pathname
+                                })
+
+				location.reload();
 			}
 
 			async function authLogout() {
