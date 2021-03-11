@@ -10,7 +10,7 @@
 	<!-- Latest compiled JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 	<!-- Authentication and RDF procssing library -->
-        <script src="./solid/solid-client-authn.bundle.js"></script>
+        <script src="./solid/solid-auth-fetcher.bundle.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/rdflib@0.20.1/dist/rdflib.min.js"></script>
 </head>
 
@@ -639,11 +639,13 @@
 
 			  
 			  async updateLoginState() {
+//???
 				const loginButton = DOC.iSel('loginID');
 				const logoutButton = DOC.iSel('logoutID');
 
 				const loggedHref = DOC.iSel('logged-href')
-				const loggedIn = (oidc_session && oidc_session.info.isLoggedIn && oidc_session.info.webId);
+//				const loggedIn = (oidc_session && oidc_session.info.isLoggedIn && oidc_session.info.webId);
+				const loggedIn = false;
 				loginButton.classList.toggle('hidden', loggedIn)
 				logoutButton.classList.toggle('hidden', !loggedIn)
 				if (loggedIn) {
@@ -686,14 +688,14 @@
 		<!-- These Functions Modify the Onscreen Display -->
 		<script>
 			var state = new State();
-			const authClient = solidClientAuthentication;
-			const oidc_session = new authClient.Session();
+//??			const authClient = solidClientAuthentication;
+//??			const oidc_session = new authClient.Session();
 
 
 			//Tooltip activation function
 			$(document).ready(async function () {
 
-				await oidc_session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
+//??				await oidc_session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
 
 				$('[data-toggle="tooltip"]').tooltip({
 					placement: 'right'
@@ -1349,7 +1351,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options)
+					resp = await fetch(url, options)
 					
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1419,7 +1421,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options);
+					resp = await fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
 						updateTable();
@@ -1478,7 +1480,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options);
+					resp = await fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
 						updateTable();
@@ -1600,7 +1602,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options)
+					resp = await fetch(url, options)
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
 
@@ -1724,7 +1726,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options)
+					resp = await fetch(url, options)
 
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1862,7 +1864,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options)
+					resp = await fetch(url, options)
 
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1969,7 +1971,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options); // resp awaits completion of fetch
+					resp = await fetch(url, options); // resp awaits completion of fetch
 
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
@@ -2017,7 +2019,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options);
+					resp = await fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						hideSpinner();
 						console.log(resp.status + " - " + resp.statusText);
@@ -2079,7 +2081,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options);
+					resp = await fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						hideSpinner();
 						console.log(resp.status + " - " + resp.statusText);
@@ -2161,7 +2163,7 @@
 
 				var resp;
 				try {
-					resp = await oidc_session.fetch(url, options);
+					resp = await fetch(url, options);
 					if (resp.ok) {
 						var body = await resp.text();
 						var contentType = resp.headers.get('content-type');
@@ -2179,13 +2181,20 @@
 			}
 
 			async function authLogin() {
-				const url = "./oidc_web/login.html#relogin";
+                               solidAuthFetcher.login({
+                                  oidcIssuer: "https://solid.openlinksw.com:8443",
+                                  popUp: true,
+                                  popUpRedirectPath: "./solid/popup.html"
+                                })
+/***
+				const url = "./solid/popup.html";
 				const width = 650;
 				const height = 400;
 				const left = window.screenX + (window.innerWidth - width) / 2;
 				const top = window.screenY + (window.innerHeight - height) / 2;
 				const settings = `width=${width},height=${height},left=${left},top=${top}`;
 				var win = window.open(url, 'Login', settings);
+***/
 			}
 
 			async function authLogout() {
