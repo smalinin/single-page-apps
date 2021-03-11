@@ -163,7 +163,7 @@
     const session = await solidAuthFetcher.getSession();
 
     // Check if user is already logged in
-    if (session.loggedIn && session.webId) {
+    if (session && session.loggedIn && session.webId) {
       show('logged')
       show('logout')
       setField("webid", session.webId)
