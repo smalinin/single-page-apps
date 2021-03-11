@@ -184,6 +184,8 @@
     try {
       var session = await solidAuthFetcher.login({
           oidcIssuer: provider,
+          popUp: false,
+          redirectUrl: window.location.href
         })
 
     } catch (error) {
