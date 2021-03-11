@@ -638,18 +638,22 @@
 			  }
 
 			  
-			  async updateLoginState() {
+			  async updateLoginState(session) {
 //???
 				const loginButton = DOC.iSel('loginID');
 				const logoutButton = DOC.iSel('logoutID');
 
 				const loggedHref = DOC.iSel('logged-href')
-//				const loggedIn = (oidc_session && oidc_session.info.isLoggedIn && oidc_session.info.webId);
+
+				if (!!session) 
+				  session = solidAuthFetcher.getSession();
+
+				const loggedIn = (session && session.loggedIn && session.webId);
 				const loggedIn = false;
 				loginButton.classList.toggle('hidden', loggedIn)
 				logoutButton.classList.toggle('hidden', !loggedIn)
 				if (loggedIn) {
-					var webid = oidc_session.info.webId;
+					var webid = session.webId;
 					if (webid) {
 					    this.webid = webid;
 						loggedHref.classList.remove('hidden')
@@ -696,6 +700,9 @@
 			$(document).ready(async function () {
 
 //??				await oidc_session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
+				solidAuthFetcher.onSession((session) => {
+				   updateLoginState(session);
+				})
 
 				$('[data-toggle="tooltip"]').tooltip({
 					placement: 'right'
@@ -1351,7 +1358,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options)
+					resp = await solidAuthFetcher.fetch(url, options)
 					
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1421,7 +1428,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options);
+					resp = await solidAuthFetcher.fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
 						updateTable();
@@ -1480,7 +1487,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options);
+					resp = await solidAuthFetcher.fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
 						updateTable();
@@ -1602,7 +1609,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options)
+					resp = await solidAuthFetcher.fetch(url, options)
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
 
@@ -1726,7 +1733,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options)
+					resp = await solidAuthFetcher.fetch(url, options)
 
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1864,7 +1871,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options)
+					resp = await solidAuthFetcher.fetch(url, options)
 
 					if (resp.ok && resp.status == 200) {
 						var data = await resp.json();
@@ -1971,7 +1978,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options); // resp awaits completion of fetch
+					resp = await solidAuthFetcher.fetch(url, options); // resp awaits completion of fetch
 
 					if (resp.status >= 200 && resp.status <= 300) {
 						console.log(resp.status + " - " + resp.statusText);
@@ -2019,7 +2026,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options);
+					resp = await solidAuthFetcher.fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						hideSpinner();
 						console.log(resp.status + " - " + resp.statusText);
@@ -2081,7 +2088,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options);
+					resp = await solidAuthFetcher.fetch(url, options);
 					if (resp.status >= 200 && resp.status <= 300) {
 						hideSpinner();
 						console.log(resp.status + " - " + resp.statusText);
@@ -2163,7 +2170,7 @@
 
 				var resp;
 				try {
-					resp = await fetch(url, options);
+					resp = await solidAuthFetcher.fetch(url, options);
 					if (resp.ok) {
 						var body = await resp.text();
 						var contentType = resp.headers.get('content-type');
@@ -2181,17 +2188,15 @@
 			}
 
 			async function authLogin() {
-			       var URI = new URL("./solid1/popup.html", window.location.href);
+				var URI = new URL("./solid1/popup.html", window.location.href);
 
-                               var info = await solidAuthFetcher.login({
+				var session = await solidAuthFetcher.login({
                                   oidcIssuer: "https://solid.openlinksw.com:8443",
                                   popUp: true,
                                   popUpRedirectPath: URI.pathname
-//                                  popUpRedirectPath: window.location.href
                                 })
 
-                              console.log("Looged=");
-                              console.log(info);
+                                return session;
 
 /***
 				const url = "./solid/popup.html";
@@ -2205,7 +2210,7 @@
 			}
 
 			async function authLogout() {
-				await authClient.logout()
+				await solidAuthFetcher.logout()
 				location.reload()
 			}
 
