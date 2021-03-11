@@ -2181,10 +2181,12 @@
 			}
 
 			async function authLogin() {
+			       var URI = new URL("./solid/popup.html", window.location.href);
+
                                solidAuthFetcher.login({
                                   oidcIssuer: "https://solid.openlinksw.com:8443",
                                   popUp: true,
-                                  popUpRedirectPath: "./solid/popup.html"
+                                  popUpRedirectPath: URI.href
                                 })
 /***
 				const url = "./solid/popup.html";
