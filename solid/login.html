@@ -208,6 +208,7 @@
       sessInfo = await client.handleIncomingRedirect(window.location.href);
       session = client.getDefaultSession();
     } else {
+      session = new client.Session();
       await session.handleIncomingRedirect({url:window.location.href, restorePreviousSession: true});
       sessInfo = session.info;
     }
