@@ -183,7 +183,7 @@
 
     try {
       var session = await solidAuthFetcher.login({
-          oidcIssuer: provider,
+          oidcIssuer: "https://solid.openlinksw.com:8443", //provider,
           popUp: false,
           redirectUrl: window.location.href
         })
