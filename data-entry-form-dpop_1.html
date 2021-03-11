@@ -649,7 +649,7 @@
 				  session = solidAuthFetcher.getSession();
 
 				const loggedIn = (session && session.loggedIn && session.webId);
-				const loggedIn = false;
+
 				loginButton.classList.toggle('hidden', loggedIn)
 				logoutButton.classList.toggle('hidden', !loggedIn)
 				if (loggedIn) {
