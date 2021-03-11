@@ -645,7 +645,7 @@
 
 				const loggedHref = DOC.iSel('logged-href')
 
-				if (!!session) 
+				if (!session) 
 				  session = await solidAuthFetcher.getSession();
 
 				const loggedIn = (session && session.loggedIn && session.webId);
